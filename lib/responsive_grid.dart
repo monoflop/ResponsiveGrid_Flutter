@@ -222,11 +222,11 @@ class ResponsiveGridList extends StatelessWidget {
         if (scroll) {
           return ListView.builder(
               shrinkWrap: shrinkWrap,
-              itemCount: (children.length / n).ceil() * 2 - 1,
+              itemCount: (children.length / n).ceil() * 2 + 1,
               itemBuilder: (context, index) {
                 //if (index * n >= children.length) return null;
                 //separator
-                if (index % 2 == 1) {
+                if (index % 2 == 0) {
                   return SizedBox(
                     height: minSpacing,
                   );
