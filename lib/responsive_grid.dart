@@ -178,6 +178,7 @@ class ResponsiveGridList extends StatelessWidget {
   final bool squareCells, scroll;
   final MainAxisAlignment rowMainAxisAlignment;
   final bool shrinkWrap;
+  final Widget? header;
 
   const ResponsiveGridList({
     required this.desiredItemWidth,
@@ -187,6 +188,7 @@ class ResponsiveGridList extends StatelessWidget {
     required this.children,
     this.rowMainAxisAlignment = MainAxisAlignment.start,
     this.shrinkWrap = false,
+    this.header,
     Key? key,
   }) : super(key: key);
 
@@ -222,7 +224,9 @@ class ResponsiveGridList extends StatelessWidget {
         if (scroll) {
           return ListView.builder(
               shrinkWrap: shrinkWrap,
-              itemCount: (children.length / n).ceil() * 2 + 1,
+              itemCount: (children.length / n).ceil() * 2 +
+                  1 +
+                  (header == null ? 0 : 1 /*if a header is used*/),
               itemBuilder: (context, index) {
                 //if (index * n >= children.length) return null;
                 //separator
@@ -231,8 +235,20 @@ class ResponsiveGridList extends StatelessWidget {
                     height: minSpacing,
                   );
                 }
+
+                //Header?
+                if (header != null && index == 1) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: spacing, right: spacing),
+                    child: header!,
+                  );
+                }
+
                 //item
                 final rowChildren = <Widget>[];
+                if (header != null) {
+                  index = index - 2;
+                }
                 index = index ~/ 2;
                 for (int i = index * n; i < (index + 1) * n; i++) {
                   if (i >= children.length) break;
